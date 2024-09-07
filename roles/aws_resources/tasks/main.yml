@@ -1,0 +1,22 @@
+---
+- name: Create AWS EC2 Instance with existing security group
+  amazon.aws.ec2_instance:
+    key_name: "devops"  # Name of the SSH key pair to use for the instance
+    instance_type: "t2.micro"  # Type of instance (e.g., t2.micro for a small instance)
+    image_id: "ami-0eeb03e72075b9bcc"  # AMI ID of the instance image to use
+    wait: true  # Wait for the instance to be in running state before proceeding
+    region: "ap-south-1"  # AWS region where the instance will be created
+    security_groups:
+      - "launch-wizard-5"  # Replace with the name of your security group if you cannot use ID
+    # or use a valid name of a security group if using ID is not an option
+  tags:
+    - ec2
+
+
+- name: Create S3 Bucket
+  amazon.aws.s3_bucket:
+    name: mohi722                    # Name of the S3 bucket to be created
+    region: "ap-south-1"             # AWS region where the bucket will be created
+    state: "{{ s3state }}"           # State of the S3 bucket, e.g., 'present' to create the bucket, 'absent' to delete it
+  tags:
+    - s3

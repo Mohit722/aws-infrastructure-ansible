@@ -1,0 +1,20 @@
+
+   # Install Python pip and Boto
+   # apt update; apt install python3-pip; pip3 install boto
+
+   # To create EC2 instance
+   # ansible-playbook awsservices.yml --tags ec2
+
+   # To create or manage S3 bucket
+   # ansible-playbook awsservices.yml --tags s3 --extra-vars "s3state=present"
+
+   # Ensure /usr/bin/python points to Python 3 and install Boto:
+   # /usr/bin/python -m pip install boto
+
+---
+- name: Set up environment and AWS resources
+  hosts: localhost
+  become: yes
+  roles:
+#    - setup_environment
+    - aws_resources

@@ -1,0 +1,37 @@
+---
+- name: Set up Python environment and install dependencies
+  tasks:
+    - name: Remove existing virtual environment if it exists
+      command: rm -rf /home/ubuntu/myenv
+      args:
+        warn: no  # Avoid warnings if the directory does not exist
+
+    - name: Create a Python virtual environment
+      command: python3 -m venv /home/ubuntu/myenv
+      args:
+        creates: /home/ubuntu/myenv/bin/activate
+
+    - name: Activate the virtual environment and upgrade pip and setuptools
+      shell: |
+        source /home/ubuntu/myenv/bin/activate
+        pip install --upgrade pip setuptools
+      args:
+        chdir: /home/ubuntu/myenv
+
+    - name: Install boto3, botocore, and ansible in the virtual environment
+      shell: |
+        source /home/ubuntu/myenv/bin/activate
+        pip install boto3 botocore ansible
+      args:
+        chdir: /home/ubuntu/myenv
+
+    - name: Verify boto3 installation
+      shell: |
+        source /home/ubuntu/myenv/bin/activate
+        pip list | grep boto3
+      register: boto3_check
+      changed_when: false
+
+    - name: Print boto3 installation details
+      debug:
+        msg: "boto3 installed: {{ boto3_check.stdout }}"
